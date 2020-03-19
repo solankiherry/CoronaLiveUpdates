@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal">
+
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="horizontal"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/_16sdp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="5dp"
+        app:contentPadding="@dimen/_5sdp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtCountryTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:fontFamily="@font/mediam_font"
+                    android:maxLines="1"
+                    android:text="Country:"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtCountryName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:maxLines="1"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtStateTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:fontFamily="@font/mediam_font"
+                    android:maxLines="1"
+                    android:text="State:"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtStateName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:maxLines="1"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtConfirmedTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:fontFamily="@font/mediam_font"
+                    android:maxLines="1"
+                    android:text="Confirmed:"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtConfirmedValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:maxLines="1"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtRecoveredTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:fontFamily="@font/mediam_font"
+                    android:maxLines="1"
+                    android:text="Recovered:"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtRecoveredValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:maxLines="1"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtDeathsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:fontFamily="@font/mediam_font"
+                    android:maxLines="1"
+                    android:text="Deaths:"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDeathsValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:maxLines="1"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtActiveTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:fontFamily="@font/mediam_font"
+                    android:maxLines="1"
+                    android:text="Active:"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtActiveValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:maxLines="1"
+                    android:textColor="@color/appcolor"
+                    android:textSize="@dimen/_13sdp" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

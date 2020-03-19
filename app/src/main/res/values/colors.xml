@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/appcolor</color>
+    <color name="colorPrimaryDark">@color/appcolor</color>
+    <color name="colorAccent">@color/white</color>
+
+    <color name="red">#F32B1C</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blackgray">#4E4F50</color>
+    <color name="appcolor">#3E2D4A</color>
+    <color name="appcolordark">#2D2135</color>
+
+    <color name="cardred">#FF505D</color>
+    <color name="cardorange">#FFAD3D</color>
+    <color name="cardgreen">#00BFA5</color>
+
+</resources>
