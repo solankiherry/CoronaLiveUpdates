@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import com.example.coronaliveupdates.api.Const;
 import com.example.coronaliveupdates.base.BaseActivity;
@@ -13,7 +14,9 @@ import com.example.coronaliveupdates.model.MainApiResponse;
 import com.example.coronaliveupdates.model.MapDataModel;
 import com.example.coronaliveupdates.utils.AdsDismissListener;
 import com.example.coronaliveupdates.utils.CustomInfoWindow;
-import com.google.android.gms.ads.AdRequest;
+import com.example.coronaliveupdates.utils.ListAdapter;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +27,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -34,6 +39,7 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
     ArrayList<MapDataModel> listOfMarkers = new ArrayList<>();
     public GoogleMap googleMap;
     MapLayoutBinding binding;
+    AdView adView;
 
     @Override
     protected int getContentView() {
@@ -60,6 +66,19 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
                 finish();
             }
         } else finish();
+
+        binding.fabSwitchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.mapLayout.getVisibility() == View.VISIBLE) {
+                    binding.mapLayout.setVisibility(View.GONE);
+                    binding.listLayout.setVisibility(View.VISIBLE);
+                } else {
+                    binding.mapLayout.setVisibility(View.VISIBLE);
+                    binding.listLayout.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -86,11 +105,11 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
                             if (result != null) {
                                 listOfMarkers.clear();
                                 listOfMarkers.addAll(result);
+
                                 new showMarkersFromList().execute();
                             } else showErrorMSG("Something went wrong");
                         } catch (Exception e) {
                         }
-                        hideDialog();
                     }
 
                     @Override
@@ -100,7 +119,7 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
                 });
     }
 
-    public class showMarkersFromList extends AsyncTask<Void, Void, Void> {
+    private class showMarkersFromList extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -109,6 +128,35 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
 
         @Override
         protected Void doInBackground(Void... voids) {
+            switch (model.getSortedPos()) {
+                case 1:
+                    Collections.sort(listOfMarkers, new Comparator<MapDataModel>() {
+                        public int compare(MapDataModel obj1, MapDataModel obj2) {
+                            return obj1.getConfirmedAsInt().compareTo(obj1.getConfirmedAsInt());
+
+                            // ## Descending order
+                            // return obj2.firstName.compareToIgnoreCase(obj1.firstName); // To compare string values
+                            // return Integer.valueOf(obj2.empId).compareTo(Integer.valueOf(obj1.empId)); // To compare integer values
+                        }
+                    });
+                    break;
+                case 2:
+                    Collections.sort(listOfMarkers, new Comparator<MapDataModel>() {
+                        public int compare(MapDataModel obj1, MapDataModel obj2) {
+                            return obj1.getRecoveredAsInt().compareTo(obj1.getRecoveredAsInt());
+                        }
+                    });
+                    break;
+                case 3:
+                    Collections.sort(listOfMarkers, new Comparator<MapDataModel>() {
+                        public int compare(MapDataModel obj1, MapDataModel obj2) {
+                            return obj1.getDeathsAsInt().compareTo(obj1.getDeathsAsInt());
+                        }
+                    });
+                    break;
+            }
+
+
             for (int i = 0; i < listOfMarkers.size(); i++) {
                 try {
                     final MapDataModel model = listOfMarkers.get(i);
@@ -138,8 +186,23 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
         @Override
         protected void onPostExecute(Void v) {
             super.onPostExecute(v);
+            hideDialog();
             CustomInfoWindow adapter = new CustomInfoWindow(MapActivity.this);
             googleMap.setInfoWindowAdapter(adapter);
+
+            ListAdapter listAdapter = new ListAdapter(MapActivity.this, listOfMarkers);
+            binding.setListAdapter(listAdapter);
+            switch (model.getSortedPos()) {
+                case 1:
+                    binding.txtSortedby.setText(getString(R.string.soarted_by, getString(R.string.confirmed)));
+                    break;
+                case 2:
+                    binding.txtSortedby.setText(getString(R.string.soarted_by, getString(R.string.recovered)));
+                    break;
+                case 3:
+                    binding.txtSortedby.setText(getString(R.string.soarted_by, getString(R.string.deaths)));
+                    break;
+            }
         }
     }
 
@@ -170,8 +233,18 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
     }*/
 
     public void loadBannerAds() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+        adView = new AdView(this, getString(R.string.fb_bannerId), AdSize.BANNER_HEIGHT_50);
+        LinearLayout adContainer = (LinearLayout) findViewById(R.id.banner_container);
+        adContainer.addView(adView);
+        adView.loadAd();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
     }
 
     @Override

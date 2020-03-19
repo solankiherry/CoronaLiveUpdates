@@ -43,6 +43,14 @@ public class MapDataModel implements Serializable {
         return confirmed;
     }
 
+    public Integer getConfirmedAsInt() {
+        try {
+            return Integer.parseInt(confirmed);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     public void setConfirmed(String confirmed) {
         this.confirmed = confirmed;
     }
@@ -75,6 +83,14 @@ public class MapDataModel implements Serializable {
         return recovered;
     }
 
+    public Integer getRecoveredAsInt() {
+        try {
+            return Integer.parseInt(recovered);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     public void setRecovered(String recovered) {
         this.recovered = recovered;
     }
@@ -97,6 +113,14 @@ public class MapDataModel implements Serializable {
 
     public String getDeaths() {
         return deaths;
+    }
+
+    public Integer getDeathsAsInt() {
+        try {
+            return Integer.parseInt(deaths);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public void setDeaths(String deaths) {

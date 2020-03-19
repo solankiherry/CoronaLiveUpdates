@@ -288,8 +288,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cardConfirm:
+                mainApiResponse.setSortedPos(1);
+                openActivity(MapActivity.class, mainApiResponse.toJson());
+                break;
             case R.id.cardRecovered:
+                mainApiResponse.setSortedPos(2);
+                openActivity(MapActivity.class, mainApiResponse.toJson());
+                break;
             case R.id.cardDeaths:
+                mainApiResponse.setSortedPos(3);
                 openActivity(MapActivity.class, mainApiResponse.toJson());
                 break;
         }

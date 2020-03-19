@@ -63,7 +63,7 @@
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginBottom="17dp"
                         android:fontFamily="@font/semibold_font"
-                        android:text="Be Safe &amp; Helthy"
+                        android:text="Be Safe &amp; Healthy"
                         android:textColor="@color/appcolor"
                         android:textSize="@dimen/_14sdp" />
 

@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
@@ -32,15 +33,15 @@ import com.example.coronaliveupdates.api.ApiClient;
 import com.example.coronaliveupdates.api.ApiService;
 import com.example.coronaliveupdates.api.Const;
 import com.example.coronaliveupdates.utils.AdsDismissListener;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
-import java.util.Random;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public ApiService apiService;
@@ -159,33 +160,38 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        showProgressDialog("Show Advertisement", true);
-        final InterstitialAd admobInterstitialAd = new InterstitialAd(this);
-        admobInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial));
-        AdRequest adRequest_intr = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        admobInterstitialAd.loadAd(adRequest_intr);
-        admobInterstitialAd.setAdListener(new AdListener() {
+        showProgressDialog("Please wait...", false);
+        final InterstitialAd fbInterstitialAd = new InterstitialAd(this, this.getString(R.string.fb_interstitialId));
+        fbInterstitialAd.setAdListener(new InterstitialAdListener() {
             @Override
-            public void onAdClosed() {
-                super.onAdClosed();
+            public void onInterstitialDisplayed(Ad ad) {
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
                 adsDismissListener.sendCloseListener();
             }
 
             @Override
-            public void onAdFailedToLoad(int i) {
-                super.onAdFailedToLoad(i);
-                hideDialog();
+            public void onError(Ad ad, AdError adError) {
                 adsDismissListener.sendCloseListener();
             }
 
             @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                hideDialog();
-                admobInterstitialAd.show();
+            public void onAdLoaded(Ad ad) {
+                if (fbInterstitialAd != null && fbInterstitialAd.isAdLoaded()) {
+                    fbInterstitialAd.show();
+                }
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
             }
         });
+        fbInterstitialAd.loadAd();
     }
 }

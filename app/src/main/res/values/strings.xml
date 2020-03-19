@@ -5,12 +5,12 @@
     <string name="recovered">Recovered</string>
     <string name="deaths">Deaths</string>
 
-
     <string name="label_connection_error">Please check your network connection (Retry).</string>
     <string name="label_last_update">Last update: %s</string>
     <string name="reset">Reset</string>
     <string name="googlemap_api_key">AIzaSyCJ4ATPgO76lcy9Wghbwdaa-RjDnIkSHXk</string>
 
-    <string name="admob_appid">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="admob_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="fb_bannerId">IMG_16_9_APP_INSTALL#873309106448515_873310849781674</string>
+    <string name="fb_interstitialId">IMG_16_9_APP_INSTALL#873309106448515_873354953110597</string>
+    <string name="soarted_by">Soarted By : %s</string>
 </resources>

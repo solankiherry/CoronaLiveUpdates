@@ -3,6 +3,8 @@ package com.example.coronaliveupdates.model;
 import com.google.gson.Gson;
 
 public class MainApiResponse {
+    int sortedPos;
+
     private DailyTimeSeries dailyTimeSeries;
 
     private String image;
@@ -29,6 +31,14 @@ public class MainApiResponse {
 
     public void setDailyTimeSeries(DailyTimeSeries dailyTimeSeries) {
         this.dailyTimeSeries = dailyTimeSeries;
+    }
+
+    public int getSortedPos() {
+        return sortedPos;
+    }
+
+    public void setSortedPos(int sortedPos) {
+        this.sortedPos = sortedPos;
     }
 
     public String getImage() {
