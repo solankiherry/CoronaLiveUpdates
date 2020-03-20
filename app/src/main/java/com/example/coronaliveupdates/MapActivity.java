@@ -3,6 +3,7 @@ package com.example.coronaliveupdates;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -61,7 +62,9 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
                 }.getType());
 
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mMap);
-                mapFragment.getMapAsync(this);
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(this);
+                }
             } catch (Exception e) {
                 finish();
             }
@@ -94,7 +97,7 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
     }
 
     private void getListOfMarkerData(String url) {
-        showProgressDialog("Please wait...", false);
+        showProgressDialog(getString(R.string.please_wait), false);
         apiService.getMapData(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -107,7 +110,7 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
                                 listOfMarkers.addAll(result);
 
                                 new showMarkersFromList().execute();
-                            } else showErrorMSG("Something went wrong");
+                            } else showErrorMSG(getString(R.string.something_wrong));
                         } catch (Exception e) {
                         }
                     }
@@ -132,30 +135,25 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
                 case 1:
                     Collections.sort(listOfMarkers, new Comparator<MapDataModel>() {
                         public int compare(MapDataModel obj1, MapDataModel obj2) {
-                            return obj1.getConfirmedAsInt().compareTo(obj1.getConfirmedAsInt());
-
-                            // ## Descending order
-                            // return obj2.firstName.compareToIgnoreCase(obj1.firstName); // To compare string values
-                            // return Integer.valueOf(obj2.empId).compareTo(Integer.valueOf(obj1.empId)); // To compare integer values
+                            return obj2.getConfirmedAsInt().compareTo(obj1.getConfirmedAsInt());
                         }
                     });
                     break;
                 case 2:
                     Collections.sort(listOfMarkers, new Comparator<MapDataModel>() {
                         public int compare(MapDataModel obj1, MapDataModel obj2) {
-                            return obj1.getRecoveredAsInt().compareTo(obj1.getRecoveredAsInt());
+                            return obj2.getRecoveredAsInt().compareTo(obj1.getRecoveredAsInt());
                         }
                     });
                     break;
                 case 3:
                     Collections.sort(listOfMarkers, new Comparator<MapDataModel>() {
                         public int compare(MapDataModel obj1, MapDataModel obj2) {
-                            return obj1.getDeathsAsInt().compareTo(obj1.getDeathsAsInt());
+                            return obj2.getDeathsAsInt().compareTo(obj1.getDeathsAsInt());
                         }
                     });
                     break;
             }
-
 
             for (int i = 0; i < listOfMarkers.size(); i++) {
                 try {
@@ -208,7 +206,7 @@ public class MapActivity extends BaseActivity implements View.OnClickListener, O
 
   /*  private void getDateWiseData(final String selDate) {
         showProgressDialog("Please wait...", false);
-        apiService.getSelDateWiseData("https://covid19.mathdro.id/api/daily/" + selDate)
+        apiService.getSelDateWiseData("pass url here" + selDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableSingleObserver<ArrayList<MapDataModel>>() {

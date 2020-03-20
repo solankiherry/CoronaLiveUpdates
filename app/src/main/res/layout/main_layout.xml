@@ -51,7 +51,7 @@
                         android:layout_above="@+id/txt"
                         android:layout_marginStart="@dimen/_11sdp"
                         android:fontFamily="@font/bold_font"
-                        android:text="COVID-19"
+                        android:text="@string/covid_19"
                         android:textColor="@color/red"
                         android:textSize="@dimen/_21sdp" />
 
@@ -63,7 +63,7 @@
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginBottom="17dp"
                         android:fontFamily="@font/semibold_font"
-                        android:text="Be Safe &amp; Healthy"
+                        android:text="@string/label_besafe"
                         android:textColor="@color/appcolor"
                         android:textSize="@dimen/_14sdp" />
 
@@ -150,7 +150,7 @@
                                 android:background="@null"
                                 android:completionThreshold="1"
                                 android:fontFamily="@font/mediam_font"
-                                android:hint="Country Name..."
+                                android:hint="@string/enter_country_name"
                                 android:inputType="text"
                                 android:maxLength="25"
                                 android:maxLines="1"
@@ -336,7 +336,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_60sdp"
+                        android:layout_marginBottom="@dimen/_80sdp"
                         app:cardBackgroundColor="#F5F5FF"
                         app:cardCornerRadius="@dimen/_15sdp"
                         app:cardElevation="0dp"
@@ -351,7 +351,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginBottom="@dimen/_10sdp"
                             android:fontFamily="@font/semibold_font"
-                            android:text="Symptoms &amp; Prevention Tips"
+                            android:text="@string/symptoms_amp_prevention_tips"
                             android:textColor="@color/appcolor"
                             android:textSize="@dimen/_14sdp" />
                     </androidx.cardview.widget.CardView>

@@ -1,10 +1,12 @@
 package com.example.coronaliveupdates.base;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -45,7 +49,7 @@ import java.lang.reflect.Type;
 
 public abstract class BaseActivity extends AppCompatActivity {
     public ApiService apiService;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     ViewDataBinding bingObj;
 
     @Override
@@ -60,10 +64,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @CallSuper
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
-    }
-
-    @CallSuper
-    protected void onLocationEnableRequestSuccess() {
     }
 
     protected abstract int getContentView();
@@ -102,25 +102,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         return bingObj;
     }
 
-    protected void setToolbar(Toolbar toolbar) {
-        setSupportActionBar(toolbar);
-    }
-
     protected void showProgressDialog(String message, boolean isCancelabe) {
         try {
             if (progressDialog == null) {
-                progressDialog = Const.getProgressDialog(BaseActivity.this, message, isCancelabe);
+                progressDialog = new Dialog(BaseActivity.this);
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                progressDialog.setContentView(R.layout.custom_dialog_progress);
+                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(isCancelabe);
+
+                TextView txtTitle = progressDialog.findViewById(R.id.txtTitle);
+                txtTitle.setText(message);
             }
             progressDialog.show();
         } catch (Exception e) {
-        }
-    }
-
-    public void setStatusBarBG(int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(color);
         }
     }
 
@@ -160,7 +156,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        showProgressDialog("Please wait...", false);
+        showProgressDialog(getString(R.string.please_wait), false);
         final InterstitialAd fbInterstitialAd = new InterstitialAd(this, this.getString(R.string.fb_interstitialId));
         fbInterstitialAd.setAdListener(new InterstitialAdListener() {
             @Override

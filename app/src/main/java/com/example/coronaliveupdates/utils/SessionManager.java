@@ -12,7 +12,6 @@ public class SessionManager {
 
     private static final String PREF_NAME = "AppPref";
     public static final String APP_COUNTRIES = "countries";
-    public static final String APP_MAINRESPONSE = "mainresponse";
 
     public SessionManager(Context context) {
         this._context = context;

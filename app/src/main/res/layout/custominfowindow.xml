@@ -34,7 +34,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:fontFamily="@font/mediam_font"
                     android:maxLines="1"
-                    android:text="Country:"
+                    android:text="@string/country_with_colon"
                     android:textColor="@color/appcolor"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -64,7 +64,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:fontFamily="@font/mediam_font"
                     android:maxLines="1"
-                    android:text="State:"
+                    android:text="@string/state_with_colon"
                     android:textColor="@color/appcolor"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -94,7 +94,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:fontFamily="@font/mediam_font"
                     android:maxLines="1"
-                    android:text="Confirmed:"
+                    android:text="@string/confirmed_with_colon"
                     android:textColor="@color/appcolor"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -124,7 +124,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:fontFamily="@font/mediam_font"
                     android:maxLines="1"
-                    android:text="Recovered:"
+                    android:text="@string/recovered_with_colon"
                     android:textColor="@color/appcolor"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -154,7 +154,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:fontFamily="@font/mediam_font"
                     android:maxLines="1"
-                    android:text="Deaths:"
+                    android:text="@string/deaths_with_colon"
                     android:textColor="@color/appcolor"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -184,7 +184,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:fontFamily="@font/mediam_font"
                     android:maxLines="1"
-                    android:text="Active:"
+                    android:text="@string/active_with_colon"
                     android:textColor="@color/appcolor"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />

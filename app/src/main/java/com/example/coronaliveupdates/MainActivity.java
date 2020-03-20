@@ -1,6 +1,7 @@
 package com.example.coronaliveupdates;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -8,11 +9,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.coronaliveupdates.api.Const;
 import com.example.coronaliveupdates.base.BaseActivity;
@@ -20,8 +26,13 @@ import com.example.coronaliveupdates.databinding.MainLayoutBinding;
 import com.example.coronaliveupdates.model.MainApiResponse;
 import com.example.coronaliveupdates.utils.AdsDismissListener;
 import com.example.coronaliveupdates.utils.SessionManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -38,7 +49,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     SessionManager sessionManager;
     ArrayList<String> countryList = new ArrayList<>();
     MainApiResponse mainApiResponse;
-    int counter = 1;
+    int counter = 2;
 
     @Override
     protected int getContentView() {
@@ -98,7 +109,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "" + getString(R.string.label_connection_error), Snackbar.LENGTH_LONG);
             snackbar.setDuration(9999999);
-            snackbar.setAction("ReTry", new View.OnClickListener() {
+            snackbar.setAction(getString(R.string.retry), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     snackbar.dismiss();
@@ -134,7 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         final String countryName = binding.countryListView.getText().toString();
         if (!TextUtils.isEmpty(countryName)) {
             counter++;
-            if (counter % 2 == 0) {
+            if (counter % 3 == 0) {
                 try {
                     loadAdsAndThanDisplay(new AdsDismissListener() {
                         @Override
@@ -148,13 +159,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             } else getSearchCountryData(countryName);
         } else {
-            showErrorMSG("Please enter country");
+            showErrorMSG(getString(R.string.error_enter_country_name));
         }
     }
 
     private void getSearchCountryData(final String countryName) {
-        showProgressDialog("Please wait...", false);
-        apiService.getCountryData("https://covid19.mathdro.id/api/countries/" + countryName)
+        showProgressDialog(getString(R.string.please_wait), false);
+        apiService.getCountryData(Const.SearchedCountryData + countryName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableSingleObserver<MainApiResponse>() {
@@ -185,8 +196,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void getMainApiData() {
-        showProgressDialog("Please wait...", false);
-        apiService.getMainApi()
+        showProgressDialog(getString(R.string.please_wait), false);
+        apiService.getMainApi(Const.MainBase)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableSingleObserver<MainApiResponse>() {
@@ -194,13 +205,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void onSuccess(MainApiResponse result) {
                         try {
                             if (result != null) {
-                                sessionManager.setStoredData(SessionManager.APP_MAINRESPONSE, result.toJson());
                                 handleMainResponse(result);
                             } else {
                                 getMainResponseFromLocal();
                             }
                         } catch (Exception e) {
                             hideDialog();
+                            getMainResponseFromLocal();
                         }
                     }
 
@@ -214,10 +225,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void getMainResponseFromLocal() {
         try {
-            String json = sessionManager.getStoredData(SessionManager.APP_MAINRESPONSE);
-            MainApiResponse response = fromJsonToGsonModel(json, new TypeToken<MainApiResponse>() {
-            }.getType());
-            handleMainResponse(response);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("CoronaUrlList")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String json = document.get("MainResponse").toString().trim();
+                                    MainApiResponse response = fromJsonToGsonModel(json, new TypeToken<MainApiResponse>() {
+                                    }.getType());
+                                    handleMainResponse(response);
+                                }
+                            } else {
+                                showErrorMSG(getString(R.string.something_wrong));
+                            }
+                        }
+                    });
         } catch (Exception e) {
         }
     }
@@ -259,13 +284,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             }
                         } catch (Exception e) {
                         }
-
                         hideDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         hideDialog();
+                        fillAutoCompletedList();
                     }
                 });
     }
@@ -275,12 +300,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Type type = new TypeToken<ArrayList<String>>() {
         }.getType();
         countryList = new Gson().fromJson(json, type);
-        if (countryList.size() > 0) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>
-                    (this, android.R.layout.select_dialog_item, countryList);
+
+        if (countryList != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                    (this, R.layout.item_autocoplittextview, countryList);
             binding.countryListView.setAdapter(adapter);
         } else {
-            getCountryList("https://covid19.mathdro.id/api/countries");
+            try {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("CoronaUrlList")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String json = document.get("CountrysResponse").toString().trim();
+                                        sessionManager.setStoredData(SessionManager.APP_COUNTRIES, json);
+                                        fillAutoCompletedList();
+                                    }
+                                } else {
+                                    showErrorMSG(getString(R.string.something_wrong));
+                                }
+                            }
+                        });
+            } catch (Exception e) {
+            }
         }
     }
 

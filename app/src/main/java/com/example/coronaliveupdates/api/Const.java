@@ -1,6 +1,5 @@
 package com.example.coronaliveupdates.api;
 
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -10,18 +9,11 @@ import android.net.Uri;
 import com.example.coronaliveupdates.R;
 
 public class Const {
-    public static final String BASE_URL = "https://covid19.mathdro.id/";
+    public static final String BASE_URL = "https://demourl/";
     public static final String DATA = "data";
-
-
-    public static ProgressDialog getProgressDialog(Context context, String message, boolean isCancelabe) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(message);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(isCancelabe);
-        progressDialog.setCanceledOnTouchOutside(false);
-        return progressDialog;
-    }
+    public static String MainBase = "";
+    public static String CountryList = "data";
+    public static String SearchedCountryData = "data";
 
     public static boolean isNetworkAvailable(Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -47,10 +39,10 @@ public class Const {
             final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
-            String shareText = "Get corona virus live updates, Download now :  https://play.google.com/store/apps/details?id=" + context.getPackageName();
+            String shareText = "Coronavirus: A deadly virus has killed thousands in a global pandemic, Read latest news about affected people counts, countries affected and more... Download now https://play.google.com/store/apps/details?id=" + context.getPackageName();
             intent.putExtra(Intent.EXTRA_TEXT, shareText);
             intent.setType("text/*");
-            context.startActivity(Intent.createChooser(intent, "Whatsapp Dark Mode"));
+            context.startActivity(Intent.createChooser(intent, "Share"));
         } catch (Exception e) {
         }
     }
